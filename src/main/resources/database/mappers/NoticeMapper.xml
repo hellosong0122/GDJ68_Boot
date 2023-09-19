@@ -40,17 +40,17 @@
   	</insert>
   	
   	<!-- detail -->
-  	<select id="getDetail" parameterType="BoardVO" resultType="NoticeVO">
+  	<select id="getDetail" parameterType="BoardVO" resultType="BoardVO">
   		SELECT * 
   		  FROM NOTICE
-  		 WHERE BOARNO= #{boardNo}  	
+  		 WHERE BOARDNO= #{boardNo}  	
   	</select> 
   	
   	<!-- update -->
   	<update id="setUpdate" parameterType="BoardVO">
   		UPDATE NOTICE 
   		   SET BOARDTITLE=#{boardTitle},
-  			   BOARDCONTETNS=#{boardContents}
+  			   BOARDCONTENTS=#{boardContents}
   		 WHERE BOARDNO=#{boardNo}  		 	
   	</update>
   	

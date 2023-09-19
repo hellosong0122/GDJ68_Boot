@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.winter.app.board.BoardVO;
 import com.winter.app.commons.Pager;
@@ -46,5 +47,38 @@ public class NoticeController {
 		
 		return "redirect:./list";
 	}
-
+	
+	@GetMapping("detail")
+	public ModelAndView getDetail(BoardVO boardVO, ModelAndView mv)throws Exception{
+		
+		boardVO = noticeService.getDetail(boardVO);
+		mv.addObject("dto",boardVO);
+		mv.setViewName("board/detail");
+		
+		return mv;
+	}
+	
+	@GetMapping("update")
+	public ModelAndView setUpdate(BoardVO boardVO, ModelAndView mv) throws Exception{
+		boardVO = noticeService.getDetail(boardVO);
+		mv.addObject("dto",boardVO);
+		mv.setViewName("board/update");
+		
+		return mv;
+	}
+	
+	@PostMapping("update")
+	public String setUpdate(BoardVO boardVO) throws Exception{
+		noticeService.setUpdate(boardVO);
+				
+		return "redirect:./list";
+	}
+	
+	@GetMapping("delete")
+	public String setDelete(BoardVO boardVO)throws Exception{
+			
+		return "redirect:./list";
+	}
+	
+	
 }
