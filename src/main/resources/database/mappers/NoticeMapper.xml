@@ -4,8 +4,34 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.winter.app.board.notice.NoticeDAO">
-  	<select id="getList" resultType="NoticeVO">
-  		SELECT * FROM NOTICE ORDER BY BOARDNO DESC
+  	<sql id="forPager">
+  		<choose>
+  			<when test="kind=='1'"> <!-- 값,변수명구분하기위해서 '' -->
+  				boardtitle
+  			</when>
+  			<when test="kind=='2'">
+  				boardcontents
+  			</when>
+  			<otherwise>
+  				boardwriter
+  			</otherwise>
+  		</choose>	
+   	</sql>
+   	
+   	<select id="getCount" parameterType="Pager" resultType="Long">
+   		<bind name="pattern" value="'%'+_parameter.getSearch()+'%'"/> <!-- mybatis에서 제공하는 동적 쿼리를 이용하는 방식 _parameter는 parameter로 접근하는 예약어-->
+   		SELECT COUNT(BOARDNO) FROM NOTICE;
+   		WHERE <include refid="forPager"></include>
+   		LIKE #{pattern}   	
+   	</select>  	
+  	
+  	<select id="getList" parameterType="Pager" resultType="NoticeVO">
+  		SELECT * FROM NOTICE
+		WHERE
+			<include refid="forPager"></include>
+		 	 LIKE CONCAT('%', #{search}, '%')
+		ORDER BY BOARDNO DESC 
+		LIMIT #{startRow}, #{lastRow};
   	</select>
   	
   	<insert id="add" parameterType="BoardVO">
@@ -13,4 +39,29 @@
   		VALUES (NULL, #{boardTitle}, #{boardWriter},  #{boardContents}, now(), 0)
   	</insert>
   	
+  	<!-- detail -->
+  	<select id="getDetail" parameterType="BoardVO" resultType="NoticeVO">
+  		SELECT * 
+  		  FROM NOTICE
+  		 WHERE BOARNO= #{boardNo}  	
+  	</select> 
+  	
+  	<!-- update -->
+  	<update id="setUpdate" parameterType="BoardVO">
+  		UPDATE NOTICE 
+  		   SET BOARDTITLE=#{boardTitle},
+  			   BOARDCONTETNS=#{boardContents}
+  		 WHERE BOARDNO=#{boardNo}  		 	
+  	</update>
+  	
+  	<!-- 조회수 update -->
+  	<update id="setHitUpdate" parameterType="BoardVO">
+  		UPDATE NOTICE SET BOARDHIT=BOARDHIT+1 WHERE BOARDNO=#{boardNo}
+  	</update>
+  	
+  	<!-- delete -->
+  	<delete id="setDelete" parameterType="BoardVO">
+  		DELETE FROM NOTICE WHERE BOARDNO=#{boardNo}  	
+  	</delete>
+  	 	
   </mapper>
