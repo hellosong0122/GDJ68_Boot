@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.winter.app.board.BoardService;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class NoticeService implements BoardService {
 
 	@Autowired
@@ -41,6 +43,7 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
+	//@Transactional(rollbackFor = Exception.class)
 	public int add(BoardVO boardVO, MultipartFile[] files) throws Exception {
 		// TODO Auto-generated method stub
 	
@@ -54,6 +57,9 @@ public class NoticeService implements BoardService {
 		 * log.info("===========================================");
 		 */
 		for(MultipartFile multipartFile:files) {
+			if(result==1) {
+				throw new Exception();
+			}
 			
 			if(multipartFile.isEmpty()) {
 				continue;
