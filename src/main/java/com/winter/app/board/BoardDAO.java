@@ -23,6 +23,6 @@ public interface BoardDAO {
 	
 	public int setDelete(BoardVO boardVO) throws Exception;
 	
-	
+	public FileVO getFileDetail(FileVO fileVO)throws Exception;
 	
 }
