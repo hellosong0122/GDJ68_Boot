@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.winter.app.board.BoardVO;
@@ -22,6 +25,12 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+//	model.addAttribute("board","notice") 모든메서드에 포함되어있음	
+	@ModelAttribute("board")
+	public String getBoard() {
+		return "notice";
+	}
 	
 	//ModelAndView, void, String
 	
@@ -40,15 +49,15 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String add(NoticeVO noticeVO)throws Exception{
+	public String add(NoticeVO noticeVO, MultipartFile[] files)throws Exception{
 		//log.info("NoticeVO : {}", noticeVO);
-		
-		int result = noticeService.add(noticeVO);
+		log.info("files:{}", files[0].getOriginalFilename());
+		int result = noticeService.add(noticeVO, files);
 		
 		return "redirect:./list";
 	}
 	
-	@GetMapping("detail")
+	/*@GetMapping("detail")
 	public ModelAndView getDetail(BoardVO boardVO, ModelAndView mv)throws Exception{
 		
 		boardVO = noticeService.getDetail(boardVO);
@@ -56,6 +65,13 @@ public class NoticeController {
 		mv.setViewName("board/detail");
 		
 		return mv;
+	}*/
+	
+	@GetMapping("detail")
+	public String getDetail(NoticeVO noticeVO,Model model)throws Exception{
+		BoardVO boardVO = noticeService.getDetail(noticeVO);
+		model.addAttribute("boardVO",boardVO);
+		return "board/detail";
 	}
 	
 	@GetMapping("update")

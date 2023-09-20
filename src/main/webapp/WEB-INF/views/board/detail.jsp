@@ -20,7 +20,19 @@
 
 				<!-- 페이지 내용 -->
 				<div class="container-fluid">
-					<h1>Detail Page</h1>
+					<div class="row">
+						<div>${boardVO.boardTitle}</div>
+						<div>${boardVO.boardWriter}</div>
+						<div>${boardVO.boardContents}</div>					
+					</div>
+					
+					<div class="row">
+						<c:forEach items="${boardVO.list}" var="f">
+							<img alt="" src="../files/${board}/${f.fileName}">
+						</c:forEach>
+					
+					</div>
+		<%-- 			<h1>Detail Page</h1>
 					<div class="card shadow mb-4">
 						<div class="card-body">
 							<div class="table-responsive">
@@ -64,7 +76,7 @@
 						</div>
 									
 							
-						</div>
+						</div> --%>
 					</div>
 				</div>
 			  <c:import url="/WEB-INF/views/layout/footer.jsp"></c:import>

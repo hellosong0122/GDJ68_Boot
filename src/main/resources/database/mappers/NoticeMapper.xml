@@ -31,20 +31,44 @@
 			<include refid="forPager"></include>
 		 	 LIKE CONCAT('%', #{search}, '%')
 		ORDER BY BOARDNO DESC 
-		LIMIT #{startRow}, #{lastRow};
+		LIMIT #{startRow}, #{lastRow}
   	</select>
   	
-  	<insert id="add" parameterType="BoardVO">
+  	<insert id="add" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="boardNo">
   		INSERT INTO NOTICE
   		VALUES (NULL, #{boardTitle}, #{boardWriter},  #{boardContents}, now(), 0)
   	</insert>
   	
+  	<insert id="fileAdd" parameterType="NoticeFileVO">
+  		INSERT INTO NOTICEFILES
+  		VALUES (#{fileNo}, #{boardNo}, #{fileName}, #{oriName})
+  	
+  	</insert>  	
+  	
   	<!-- detail -->
-  	<select id="getDetail" parameterType="BoardVO" resultType="BoardVO">
-  		SELECT * 
-  		  FROM NOTICE
-  		 WHERE BOARDNO= #{boardNo}  	
-  	</select> 
+  	<select id="getDetail" parameterType="BoardVO" resultMap="getDetailResult">
+  		SELECT N.*, NF.* 
+  		  FROM 
+  		  		NOTICE N
+  		  		LEFT OUTER JOIN
+  		  		NOTICEFILES NF
+  		  		ON N.BOARDNO=NF.BOARDNO  		  		
+  		 WHERE N.BOARDNO= #{boardNo}  	
+  	</select>
+  	
+  	<resultMap type="NoticeVO" id="getDetailResult">
+  		<id column="BOARDNO" property="boardNo"/>
+  		<result column="BOARDTITLE" property="boardTitle"/>
+  		<result column="BOARDWRITER" property="boardWriter"/>
+  		<result column="BOARDCONTENTS" property="boardContents"/>
+  		<result column="BOARDDATE" property="boardDate"/>
+  		<result column="BOARDHIT" property="boardHit"/>
+  		<collection property="list" javaType="java.util.List" ofType="NoticeFileVO">
+  			<id column="FILENO" property="fileNo"/> <!-- noticefile의 fileno -->
+  			<result column="FILENAME" property="fileName"/>
+  			<result column="ORINAME" property="oriName"/>
+  		</collection>
+  	</resultMap> 
   	
   	<!-- update -->
   	<update id="setUpdate" parameterType="BoardVO">
