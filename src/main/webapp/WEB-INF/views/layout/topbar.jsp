@@ -24,7 +24,23 @@
                     </form>
 
               <!-- Topbar Navbar -->
-                    
+                <c:if test="${empty member}">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/member/join" role="button" aria-expanded="false">
+                                 <i class='far fa-address-card' style='font-size:24px'></i>
+                            </a>
+                            
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/member/login" role="button" aria-expanded="false">
+                                 <i class='far fa-address-book' style='font-size:24px'></i>
+                            </a>
+                            
+                        </li>
+                    </ul>
+                    </c:if>  
+  
                    <c:if test="${not empty member}">
                     <ul class="navbar-nav ml-auto">
 
@@ -186,9 +202,9 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/member/update">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    정보수정
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
