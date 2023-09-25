@@ -59,17 +59,17 @@ public class MemberController {
 		
 	}
 	
-	@PostMapping("login")
-	public String getLogin(MemberVO memberVO, HttpSession session)throws Exception{
-		memberVO = memberService.getLogin(memberVO);
-		
-		if(memberVO != null) {
-			session.setAttribute("member", memberVO);
-			return "redirect:../";
-		}
-		
-		return "redirect:./login";
-	}
+//	@PostMapping("login")
+//	public String getLogin(MemberVO memberVO, HttpSession session)throws Exception{
+//		memberVO = memberService.getLogin(memberVO);
+//		
+//		if(memberVO != null) {
+//			session.setAttribute("member", memberVO);
+//			return "redirect:../";
+//		}
+//		
+//		return "redirect:./login";
+//	}
 	
 	
 	/*
@@ -93,7 +93,7 @@ public class MemberController {
 		}
 		
 		//회원가입 진행
-		
+		int result = memberService.setJoin(memberVO);
 		
 		log.info("Photo : {} --- size : {}", photo.getOriginalFilename(), photo.getSize());
 		return "redirect:../";

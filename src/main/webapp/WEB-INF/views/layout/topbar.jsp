@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -24,7 +25,9 @@
                     </form>
 
               <!-- Topbar Navbar -->
-                <c:if test="${empty member}">
+              <!-- 로그인 전 -->
+              <sec:authorize access="!isAuthenticated()">
+               
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="/member/join" role="button" aria-expanded="false">
@@ -38,10 +41,9 @@
                             </a>
                             
                         </li>
-                    </ul>
-                    </c:if>  
-  
-                   <c:if test="${not empty member}">
+                    </ul>                 
+  			</sec:authorize>
+                   <sec:authorize access="isAuthenticated()">
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -219,6 +221,6 @@
                         </li>
 
                      </ul>
-					</c:if>
+					</sec:authorize>
                 </nav>
                 <!-- End of Topbar -->
