@@ -84,11 +84,13 @@ public class MemberController {
 	}
 	
 	@PostMapping("join")
-	public String setJoin(@Valid MemberVO memberVO,BindingResult bindingResult, MultipartFile photo)throws Exception{
+	public String setJoin(MemberVO memberVO,BindingResult bindingResult, MultipartFile photo)throws Exception{
 		
+		memberService.testValid(memberVO, bindingResult);
+				
 		boolean check = memberService.getMemberError(memberVO, bindingResult);
 		
-		if(bindingResult.hasErrors() || check) {
+		if(bindingResult.hasErrors() ) {
 			return "member/join";
 		}
 		
