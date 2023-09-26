@@ -35,6 +35,7 @@
   		<result column="EMAIL" property="email"/>
   		<result column="BIRTH" property="birth"/>
   		<result column="JOINDATE" property="joinDate"/>
+  		<result column="ENABLED" property="enabled"/>
   	<!-- 	사진있을경우 association 먼저 -->
   		
   		<collection property="roleVOs" javaType="List" ofType="RoleVO">

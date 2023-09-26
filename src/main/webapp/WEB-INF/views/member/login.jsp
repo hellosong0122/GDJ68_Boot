@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +24,12 @@
 	    			<!-- 다른 url로 가야할 경우에는 action적어줘야하마 -->
 	    			<!-- path membervo getter의 이름 -->
 		    		<div class="container-fluid">
-		    			<form:form modelAttribute="memberVO" method="post" >		    			
+		    			<div>
+		    				<h3>${param.message}</h3>
+		    				<spring:message code="${param.message}" var="msg"></spring:message>	
+		    				<h3>${msg}</h3>
+		    			</div>
+		    		 <form:form modelAttribute="memberVO" method="post" >		    			
 			    			<div class="form-group">
 			    				<form:label path="username">Username</form:label>
 			    				<form:input id="username"  path="username" cssClass="form-control"/> 
@@ -48,5 +54,12 @@
 	    	</div>
 	    </div>  
 	<c:import url="/WEB-INF/views/layout/footjs.jsp"></c:import>
+	<script type="text/javascript">
+		let m  = '${msg}';
+		
+		if(m != ''){
+		alert('${msg}');	
+		}
+	</script>
 </body>
 </html>
