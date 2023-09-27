@@ -28,8 +28,8 @@
 		    			<h3>${vo.name}</h3>
 		    			<h3>${vo.email}</h3>
 		    			<h3>${vo.birth}</h3>
-		    			<h3>${vo.joindate}</h3>	    		
-		    		
+		    			<h3>${vo.joindate}</h3>
+		    			<h3><sec:authentication property="principal.email"/></h3>
 		    		</div>   		
 	    		
 	    		</div>	    		

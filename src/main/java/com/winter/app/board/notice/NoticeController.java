@@ -57,7 +57,7 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String add(NoticeVO noticeVO, MultipartFile[] files)throws Exception{
+	public String addTest(NoticeVO noticeVO, MultipartFile[] files)throws Exception{
 		//log.info("NoticeVO : {}", noticeVO);
 		log.info("files:{}", files[0].getOriginalFilename());
 		int result = noticeService.add(noticeVO, files);
