@@ -69,10 +69,13 @@ public class SecurityConfig {
 				.key("rememberKey")
 				.userDetailsService(memberService)
 				.authenticationSuccessHandler(handler)
-				.and()				
-			.sessionManagement()
-			
+				.and()		
 				
+			.oauth2Login()
+				.userInfoEndpoint()
+				.userService(memberService)
+				.and()
+			
 			;
 		
 		return httpSecurity.build();
