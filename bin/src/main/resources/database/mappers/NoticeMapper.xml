@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.winter.app.board.notice.NoticeDAO">
+  	<sql id="forPager">
+  		<choose>
+  			<when test="kind=='1'"> <!-- 값,변수명구분하기위해서 '' -->
+  				boardtitle
+  			</when>
+  			<when test="kind=='2'">
+  				boardcontents
+  			</when>
+  			<otherwise>
+  				boardwriter
+  			</otherwise>
+  		</choose>	
+   	</sql>
+   	
+   	<select id="getCount" parameterType="Pager" resultType="Long">
+   		<bind name="pattern" value="'%'+_parameter.getSearch()+'%'"/> <!-- mybatis에서 제공하는 동적 쿼리를 이용하는 방식 _parameter는 parameter로 접근하는 예약어-->
+   		SELECT COUNT(BOARDNO) FROM NOTICE;
+   		WHERE <include refid="forPager"></include>
+   		LIKE #{pattern}   	
+   	</select>  	
+  	
+  	<select id="getList" parameterType="Pager" resultType="NoticeVO">
+  		SELECT * FROM NOTICE
+		WHERE
+			<include refid="forPager"></include>
+		 	 LIKE CONCAT('%', #{search}, '%')
+		ORDER BY BOARDNO DESC 
+		LIMIT #{startRow}, #{lastRow}
+  	</select>
+  	
+  	<insert id="add" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="boardNo">
+  		INSERT INTO NOTICE
+  		VALUES (NULL, #{boardTitle}, #{boardWriter},  #{boardContents}, now(), 0)
+  	</insert>
+  	
+  	<insert id="fileAdd" parameterType="NoticeFileVO">
+  		INSERT INTO NOTICEFILES
+  		VALUES (#{fileNo}, #{boardNo}, #{fileName}, #{oriName})
+  	
+  	</insert>  	
+  	
+  	<!-- detail -->
+  	<select id="getDetail" parameterType="BoardVO" resultMap="getDetailResult">
+  		SELECT N.*, NF.* 
+  		  FROM 
+  		  		NOTICE N
+  		  		LEFT OUTER JOIN
+  		  		NOTICEFILES NF
+  		  		ON N.BOARDNO=NF.BOARDNO  		  		
+  		 WHERE N.BOARDNO= #{boardNo}  	
+  	</select>
+  	
+  	<resultMap type="NoticeVO" id="getDetailResult">
+  		<id column="BOARDNO" property="boardNo"/>
+  		<result column="BOARDTITLE" property="boardTitle"/>
+  		<result column="BOARDWRITER" property="boardWriter"/>
+  		<result column="BOARDCONTENTS" property="boardContents"/>
+  		<result column="BOARDDATE" property="boardDate"/>
+  		<result column="BOARDHIT" property="boardHit"/>
+  		<collection property="list" javaType="java.util.List" ofType="NoticeFileVO">
+  			<id column="FILENO" property="fileNo"/> <!-- noticefile의 fileno -->
+  			<result column="FILENAME" property="fileName"/>
+  			<result column="ORINAME" property="oriName"/>
+  		</collection>
+  	</resultMap> 
+  	
+  	<!-- update -->
+  	<update id="setUpdate" parameterType="BoardVO">
+  		UPDATE NOTICE 
+  		   SET BOARDTITLE=#{boardTitle},
+  			   BOARDCONTENTS=#{boardContents}
+  		 WHERE BOARDNO=#{boardNo}  		 	
+  	</update>
+  	
+  	<!-- 조회수 update -->
+  	<update id="setHitUpdate" parameterType="BoardVO">
+  		UPDATE NOTICE SET BOARDHIT=BOARDHIT+1 WHERE BOARDNO=#{boardNo}
+  	</update>
+  	
+  	<!-- delete -->
+  	<delete id="setDelete" parameterType="BoardVO">
+  		DELETE FROM NOTICE WHERE BOARDNO=#{boardNo}  	
+  	</delete>
+  	
+  	<select id="getFileDetail" parameterType="FileVO" resultType="NoticeFileVO">
+  		SELECT * FROM NOTICEFILES WHERE FILENO=#{fileNo}
+  	</select>
+  	 	
+  </mapper>

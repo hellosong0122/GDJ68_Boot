@@ -50,13 +50,13 @@ public class MemberService extends DefaultOAuth2UserService implements UserDetai
 		String social = clientRegistration.getRegistrationId();
 		
 		if(social.equals("kakao")) {
-			auth2User = this.forKakao(auth2User);
+			auth2User = this.forKakao(auth2User, userRequest);
 		}
 		
 		return auth2User ;
 	}
 	
-	private OAuth2User forKakao(OAuth2User auth2User){
+	private OAuth2User forKakao(OAuth2User auth2User, OAuth2UserRequest userRequest){
 		MemberVO memberVO = new MemberVO();
 		LinkedHashMap<String, String> map =auth2User.getAttribute("properties");
 		//memberVO.setUsername();
@@ -85,8 +85,12 @@ public class MemberService extends DefaultOAuth2UserService implements UserDetai
 		
 	//	sb.append(y).append("-")
 		
+		//사용자가 db에 있는지 확인
+		memberVO.setAccessToken(userRequest.getAccessToken().getTokenValue());
 		memberVO.setUsername(map.get("nickname"));
-		memberVO.setName(map.get("nickname"));
+		//memberVO.setName(map.get("nickname"));
+		//회원id를 name에 대입
+		memberVO.setName(auth2User.getName());
 		memberVO.setEmail(kakaoAccount.get("email").toString());
 		memberVO.setBirth(Date.valueOf(sb.toString()));
 		
